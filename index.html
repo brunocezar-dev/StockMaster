@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="StockMaster - sistema de controle de estoque, produtos e fornecedores.">
+  <title>StockMaster | Gestão de Estoque</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="#"><span class="brand-mark">S</span><span>Stock<span class="brand-accent">Master</span></span></a>
+  <p class="nav-label">GESTÃO</p>
+  <a class="nav-link active" href="#overview"><span>▦</span> Visão geral</a>
+  <a class="nav-link" href="#products"><span>▣</span> Produtos</a>
+  <a class="nav-link" href="#movements"><span>↕</span> Movimentações</a>
+  <a class="nav-link" href="#suppliers"><span>♧</span> Fornecedores</a>
+  <a class="nav-link" href="#reports"><span>▥</span> Relatórios</a>
+  <div class="sidebar-illustration"><img src="assets/photo.png" alt=""><b>Estoque inteligente.</b><small>Controle tudo em um só lugar.</small></div>
+  <div class="profile"><div class="avatar">SM</div><div><b>Minha empresa</b><small>Conta demonstrativa</small></div></div>
+</aside>
+<main class="main" id="overview">
+  <header class="topbar"><div><p class="eyebrow">PAINEL DE CONTROLE</p><h1>Visão geral</h1><p class="subtitle">Acompanhe seus produtos, movimentações e resultados.</p></div><button class="primary-btn" id="addProductTop">＋ Novo produto</button></header>
+  <section class="welcome"><div><span class="welcome-tag">STOCKMASTER · GESTÃO SIMPLES</span><h2>Seu estoque organizado. Sua empresa em movimento.</h2><p>Tenha controle das entradas, saídas e níveis de estoque em tempo real.</p></div><img src="assets/photo.png" alt="Ilustração de gestão de estoque"></section>
+  <section class="stats">
+    <article class="stat"><div class="stat-head">Produtos cadastrados <span class="stat-icon purple">▣</span></div><strong id="productCount">0</strong><small>Itens no catálogo</small></article>
+    <article class="stat"><div class="stat-head">Unidades em estoque <span class="stat-icon blue">▤</span></div><strong id="unitCount">0</strong><small>Quantidade total disponível</small></article>
+    <article class="stat"><div class="stat-head">Estoque baixo <span class="stat-icon orange">⚠</span></div><strong id="lowCount">0</strong><small>Produtos no nível de alerta</small></article>
+    <article class="stat"><div class="stat-head">Valor em estoque <span class="stat-icon green">R$</span></div><strong id="stockValue">R$ 0,00</strong><small>Custo estimado dos produtos</small></article>
+  </section>
+  <section class="grid-panels">
+    <article class="panel" id="reports"><div class="panel-heading"><div><h3>Movimentações do estoque</h3><p>Entradas e saídas registradas</p></div><span class="period">Visão geral</span></div><div class="chart-box"><canvas id="movementChart"></canvas></div></article>
+    <article class="panel"><div class="panel-heading"><div><h3>Visão do estoque</h3><p>Distribuição por situação</p></div></div><div class="doughnut-box"><canvas id="stockChart"></canvas></div><div class="legend"><span><i class="dot available"></i> Normal</span><span><i class="dot low"></i> Estoque baixo</span><span><i class="dot empty"></i> Zerado</span></div></article>
+  </section>
+  <section class="panel" id="products">
+    <div class="panel-heading product-heading"><div><h3>Produtos</h3><p>Consulte e atualize os itens cadastrados</p></div><div class="toolbar"><input id="productSearch" placeholder="Buscar produto..." aria-label="Buscar produto"><button class="outline-btn" id="addProductBtn">＋ Cadastrar produto</button></div></div>
+    <div class="table-scroll"><table><thead><tr><th>PRODUTO</th><th>CATEGORIA</th><th>SKU</th><th>QUANTIDADE</th><th>ESTOQUE MÍNIMO</th><th>PREÇO UNITÁRIO</th><th>SITUAÇÃO</th><th>AÇÃO</th></tr></thead><tbody id="productTable"></tbody></table></div>
+  </section>
+  <section class="grid-panels lower-grid">
+    <article class="panel" id="movements"><div class="panel-heading"><div><h3>Últimas movimentações</h3><p>Entradas e saídas recentes</p></div><button class="outline-btn" id="newMovementBtn">＋ Movimentar</button></div><div id="movementList" class="movement-list"></div></article>
+    <article class="panel" id="suppliers"><div class="panel-heading"><div><h3>Fornecedores</h3><p>Parceiros cadastrados</p></div><button class="outline-btn" id="newSupplierBtn">＋ Adicionar</button></div><div id="supplierList" class="supplier-list"></div></article>
+  </section>
+  <footer>StockMaster <span>•</span> Projeto de portfólio — Java, Spring Boot, MySQL e JavaScript</footer>
+</main>
+
+<div class="backdrop" id="productModal"><form class="modal" id="productForm"><button type="button" class="close" data-close="productModal">×</button><p class="eyebrow">CATÁLOGO DE PRODUTOS</p><h2>Cadastrar produto</h2>
+<label>Nome do produto<input name="name" required maxlength="100" placeholder="Ex.: Teclado sem fio"></label>
+<div class="form-row"><label>Categoria<input name="category" required placeholder="Ex.: Informática"></label><label>SKU / Código<input name="sku" required placeholder="Ex.: INF-001"></label></div>
+<div class="form-row"><label>Quantidade inicial<input name="quantity" type="number" min="0" step="1" required value="0"></label><label>Estoque mínimo<input name="minimumStock" type="number" min="0" step="1" required value="5"></label></div>
+<div class="form-row"><label>Preço unitário (R$)<input name="price" type="number" min="0" step="0.01" required placeholder="0,00"></label><label>Fornecedor<select name="supplierId" id="productSupplier"></select></label></div>
+<button class="primary-btn full" type="submit">Salvar produto</button><p class="message" id="productMessage"></p></form></div>
+
+<div class="backdrop" id="movementModal"><form class="modal" id="movementForm"><button type="button" class="close" data-close="movementModal">×</button><p class="eyebrow">MOVIMENTAÇÃO DE ESTOQUE</p><h2>Registrar entrada ou saída</h2>
+<label>Produto<select name="productId" id="movementProduct" required></select></label>
+<div class="form-row"><label>Tipo<select name="type"><option value="IN">Entrada</option><option value="OUT">Saída</option></select></label><label>Quantidade<input name="quantity" type="number" min="1" step="1" required></label></div>
+<label>Observação<input name="note" maxlength="120" placeholder="Ex.: Compra, venda ou ajuste"></label>
+<button class="primary-btn full" type="submit">Registrar movimentação</button><p class="message" id="movementMessage"></p></form></div>
+
+<div class="backdrop" id="supplierModal"><form class="modal" id="supplierForm"><button type="button" class="close" data-close="supplierModal">×</button><p class="eyebrow">REDE DE FORNECEDORES</p><h2>Cadastrar fornecedor</h2>
+<label>Nome / Empresa<input name="name" required placeholder="Nome do fornecedor"></label><div class="form-row"><label>E-mail<input name="email" type="email" placeholder="contato@empresa.com"></label><label>Telefone<input name="phone" placeholder="(00) 00000-0000"></label></div>
+<button class="primary-btn full" type="submit">Salvar fornecedor</button><p class="message" id="supplierMessage"></p></form></div>
+<script src="app.js"></script>
+</body></html>
