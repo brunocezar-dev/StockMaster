@@ -93,4 +93,4 @@ Substitua `SEU-USUARIO` pelo seu usuário do GitHub.
 ## Observações
 - O modo demonstração usa localStorage e não requer MySQL.
 - O backend é uma base didática para portfólio. Antes de usar em produção, adicione autenticação, autorização, validação de regras de negócio, testes, paginação e auditoria.
-- Não publique credenciais reais do banco no GitHub.
+
